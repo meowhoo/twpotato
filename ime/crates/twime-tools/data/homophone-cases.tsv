@@ -1,0 +1,20 @@
+# N3b M0: homophone word examples written by hand (no corpus sentences). Frozen before any tuning.
+# id	kind(neutral = the common word is expected; domain = the rarer word is expected)	expected word	sentence	symbols (space separated, one per character)
+quanli-1	neutral	權利	我們要爭取自己的權利	ㄨㄛˇ ㄇㄣˊ ㄧㄠˋ ㄓㄥ ㄑㄩˇ ㄗˋ ㄐㄧˇ ㄉㄜ˙ ㄑㄩㄢˊ ㄌㄧˋ
+quanli-2	neutral	全力	他已經盡了全力	ㄊㄚ ㄧˇ ㄐㄧㄥ ㄐㄧㄣˋ ㄌㄜ˙ ㄑㄩㄢˊ ㄌㄧˋ
+quanli-3	domain	權力	政府的權力受到憲法限制	ㄓㄥˋ ㄈㄨˇ ㄉㄜ˙ ㄑㄩㄢˊ ㄌㄧˋ ㄕㄡˋ ㄉㄠˋ ㄒㄧㄢˋ ㄈㄚˇ ㄒㄧㄢˋ ㄓˋ
+yiren-1	neutral	藝人	這位藝人很有名	ㄓㄜˋ ㄨㄟˋ ㄧˋ ㄖㄣˊ ㄏㄣˇ ㄧㄡˇ ㄇㄧㄥˊ
+yiren-2	domain	薏仁	紅豆薏仁湯很好喝	ㄏㄨㄥˊ ㄉㄡˋ ㄧˋ ㄖㄣˊ ㄊㄤ ㄏㄣˇ ㄏㄠˇ ㄏㄜ
+yiren-3	neutral	藝人	他是一位電視藝人	ㄊㄚ ㄕˋ ㄧˊ ㄨㄟˋ ㄉㄧㄢˋ ㄕˋ ㄧˋ ㄖㄣˊ
+yiyi-1	neutral	意義	這件事很有意義	ㄓㄜˋ ㄐㄧㄢˋ ㄕˋ ㄏㄣˇ ㄧㄡˇ ㄧˋ ㄧˋ
+yiyi-2	domain	異議	會議上有人提出異議	ㄏㄨㄟˋ ㄧˋ ㄕㄤˋ ㄧㄡˇ ㄖㄣˊ ㄊㄧˊ ㄔㄨ ㄧˋ ㄧˋ
+jiyi-1	neutral	記憶	我的記憶力不太好	ㄨㄛˇ ㄉㄜ˙ ㄐㄧˋ ㄧˋ ㄌㄧˋ ㄅㄨˋ ㄊㄞˋ ㄏㄠˇ
+jiyi-2	domain	技藝	傳統技藝需要傳承	ㄔㄨㄢˊ ㄊㄨㄥˇ ㄐㄧˋ ㄧˋ ㄒㄩ ㄧㄠˋ ㄔㄨㄢˊ ㄔㄥˊ
+shili-1	neutral	視力	他的視力不太好	ㄊㄚ ㄉㄜ˙ ㄕˋ ㄌㄧˋ ㄅㄨˋ ㄊㄞˋ ㄏㄠˇ
+shili-2	domain	勢力	各方勢力相互牽制	ㄍㄜˋ ㄈㄤ ㄕˋ ㄌㄧˋ ㄒㄧㄤ ㄏㄨˋ ㄑㄧㄢ ㄓˋ
+shiwu-1	neutral	事物	新事物總是有人反對	ㄒㄧㄣ ㄕˋ ㄨˋ ㄗㄨㄥˇ ㄕˋ ㄧㄡˇ ㄖㄣˊ ㄈㄢˇ ㄉㄨㄟˋ
+shiwu-2	domain	飾物	她戴著精美的飾物	ㄊㄚ ㄉㄞˋ ㄓㄜ˙ ㄐㄧㄥ ㄇㄟˇ ㄉㄜ˙ ㄕˋ ㄨˋ
+shichang-1	neutral	市場	傳統市場很熱鬧	ㄔㄨㄢˊ ㄊㄨㄥˇ ㄕˋ ㄔㄤˇ ㄏㄣˇ ㄖㄜˋ ㄋㄠˋ
+shichang-2	domain	試場	考生陸續進入試場	ㄎㄠˇ ㄕㄥ ㄌㄨˋ ㄒㄩˋ ㄐㄧㄣˋ ㄖㄨˋ ㄕˋ ㄔㄤˇ
+gongshi-1	neutral	公式	數學公式很難背	ㄕㄨˋ ㄒㄩㄝˊ ㄍㄨㄥ ㄕˋ ㄏㄣˇ ㄋㄢˊ ㄅㄟˋ
+gongshi-2	domain	攻勢	球隊發動猛烈攻勢	ㄑㄧㄡˊ ㄉㄨㄟˋ ㄈㄚ ㄉㄨㄥˋ ㄇㄥˇ ㄌㄧㄝˋ ㄍㄨㄥ ㄕˋ

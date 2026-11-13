@@ -1,0 +1,30 @@
+fcitx5-twpotato: the Fcitx5 front end of TwPotato (地瓜輸入法), a bopomofo input method.
+Source code: @HOMEPAGE@
+
+This package holds twpotato.so, an addon that Fcitx5 loads, and its two configuration files. TwPotato's own code,
+this addon included, is under the MIT license (the text is at the end of this file). The Rust crates linked into the
+addon are listed in /usr/share/doc/twpotato/THIRD-PARTY-NOTICES.md (package twpotato, which this package depends on).
+
+Use of Fcitx5 (GNU Lesser General Public License, version 2.1 or later)
+
+  twpotato.so uses the Fcitx5 library (libFcitx5Core and the libraries it brings in). Fcitx5 is copyrighted by its
+  authors (CSSlayer <wengxt@gmail.com> and the Fcitx5 contributors) and is covered by the GNU Lesser General Public
+  License, version 2.1 or (at your option) any later version. A copy of that license is in LGPL-2.1.txt in this
+  directory (on Debian and Ubuntu systems the same text is in /usr/share/common-licenses/LGPL-2.1).
+
+  - The Fcitx5 library is NOT part of this package and is not distributed with TwPotato. The addon is linked
+    dynamically to the shared library your operating system installs (the Fcitx5 packages this package depends on).
+    You may replace that library with a modified version that keeps its interface; the addon then runs with it.
+  - The addon was compiled with the header files of Fcitx5. Small inline functions, templates and macros of those
+    headers are therefore contained in twpotato.so. No other part of Fcitx5 is contained in it, and no source code of
+    Fcitx5 was copied into TwPotato.
+  - The complete source code of the addon is public under the MIT license (the address above; ime/linux/fcitx5 and
+    ime/crates/twime-shell). ime/linux/build.sh rebuilds and relinks it against the Fcitx5 installed on your system.
+  - The source code of Fcitx5: https://github.com/fcitx/fcitx5 , or "apt source fcitx5" on Ubuntu.
+
+Other system libraries the addon is linked to dynamically, none of them part of this package: the C++ and compiler
+runtime (libstdc++, libgcc; GPL 3 or later with the GCC Runtime Library Exception) and the C library (glibc; LGPL 2.1
+or later).
+
+----------------------------------------------------------------------------------------------------------------------
+@LICENSE@

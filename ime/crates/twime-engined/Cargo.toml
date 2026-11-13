@@ -1,0 +1,24 @@
+[package]
+name = "twime-engined"
+version = "0.1.9"
+edition = "2024"
+license = "MIT"
+publish = false
+
+# VERSIONINFO resource (build.rs, ../../build/versioninfo.rs)
+[build-dependencies]
+embed-resource = "=3.0.12"
+
+[dependencies]
+twime-userdata = { path = "../twime-userdata" }
+twime-model = { path = "../twime-model" }
+twime-core = { path = "../twime-core" }
+twime-proto = { path = "../twime-proto" }
+twime-winpipe = { path = "../twime-winpipe" }
+
+[target.'cfg(windows)'.dependencies.windows]
+version = "0.62"
+features = ["Win32_Foundation", "Win32_System_Threading"]
+
+[features]
+arch-prof = ["twime-model/arch-prof"]

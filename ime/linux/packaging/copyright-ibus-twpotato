@@ -1,0 +1,32 @@
+ibus-twpotato: the IBus front end of TwPotato (地瓜輸入法), a bopomofo input method.
+Source code: @HOMEPAGE@
+
+This package holds ibus-engine-twpotato, the program ibus-daemon starts for the input method, and its component file.
+TwPotato's own code, this program included, is under the MIT license (the text is at the end of this file). The Rust
+crates linked into the program are listed in /usr/share/doc/twpotato/THIRD-PARTY-NOTICES.md (package twpotato, which
+this package depends on).
+
+Use of IBus and GLib (GNU Lesser General Public License, version 2.1 or later)
+
+  ibus-engine-twpotato uses the IBus client library (libibus-1.0) and, through its interface, GLib and GObject
+  (libglib-2.0, libgobject-2.0). libibus is copyrighted by its authors (Peng Huang, Takao Fujiwara, Red Hat, Inc. and
+  the IBus contributors); GLib by the GLib authors (the GNOME Project and its contributors). Both are covered by the
+  GNU Lesser General Public License, version 2.1 or (at your option) any later version. A copy of that license is in
+  LGPL-2.1.txt in this directory (on Debian and Ubuntu systems the same text is in /usr/share/common-licenses/LGPL-2.1).
+
+  - Neither library is part of this package, and neither is distributed with TwPotato. The program is linked
+    dynamically to the shared libraries your operating system installs (the packages this package depends on). You
+    may replace them with modified versions that keep their interfaces; the program then runs with them.
+  - The program was compiled with the header files of libibus and GLib. Macros and small inline functions of those
+    headers are therefore contained in ibus-engine-twpotato. No other part of IBus or GLib is contained in it, and no
+    source code of IBus, of GLib or of any IBus engine was copied into TwPotato.
+  - The complete source code of the program is public under the MIT license (the address above; ime/linux/ibus and
+    ime/crates/twime-shell). ime/linux/build.sh rebuilds and relinks it against the libraries installed on your system.
+  - The source code of the libraries: https://github.com/ibus/ibus and https://gitlab.gnome.org/GNOME/glib , or
+    "apt source ibus" and "apt source glib2.0" on Ubuntu.
+
+Other system libraries the program is linked to dynamically, none of them part of this package: the compiler runtime
+(libgcc; GPL 3 or later with the GCC Runtime Library Exception) and the C library (glibc; LGPL 2.1 or later).
+
+----------------------------------------------------------------------------------------------------------------------
+@LICENSE@

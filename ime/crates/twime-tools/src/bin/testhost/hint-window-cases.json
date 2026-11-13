@@ -1,0 +1,334 @@
+{
+  "position": [
+    {
+      "composition": [
+        100,
+        100,
+        140,
+        120
+      ],
+      "work": [
+        0,
+        0,
+        1000,
+        800
+      ],
+      "expected": [
+        100,
+        122,
+        300,
+        162
+      ]
+    },
+    {
+      "composition": [
+        100,
+        760,
+        140,
+        780
+      ],
+      "work": [
+        0,
+        0,
+        1000,
+        800
+      ],
+      "expected": [
+        100,
+        718,
+        300,
+        758
+      ]
+    },
+    {
+      "composition": [
+        950,
+        100,
+        980,
+        120
+      ],
+      "work": [
+        0,
+        0,
+        1000,
+        800
+      ],
+      "expected": [
+        800,
+        122,
+        1000,
+        162
+      ]
+    },
+    {
+      "composition": [
+        -50,
+        -40,
+        -10,
+        0
+      ],
+      "work": [
+        -1920,
+        -1080,
+        0,
+        0
+      ],
+      "expected": [
+        -200,
+        -83,
+        0,
+        -43
+      ]
+    }
+  ],
+  "lifecycle": [
+    {
+      "kind": "candidates",
+      "steps": [
+        {
+          "input": "snapshot",
+          "document": "",
+          "ranges": [],
+          "hint": {
+            "options": [
+              "1",
+              "2"
+            ],
+            "current": 0
+          },
+          "popup": {
+            "open": false,
+            "counts": [
+              1,
+              0,
+              1
+            ]
+          }
+        },
+        {
+          "input": "snapshot",
+          "document": "",
+          "ranges": [],
+          "hint": {
+            "options": [
+              "1",
+              "2"
+            ],
+            "current": 0
+          },
+          "popup": {
+            "open": true,
+            "counts": [
+              1,
+              1,
+              0
+            ]
+          }
+        },
+        {
+          "input": "snapshot",
+          "document": "",
+          "ranges": [],
+          "hint": {
+            "options": [
+              "1",
+              "2"
+            ],
+            "current": 0
+          },
+          "popup": {
+            "open": false,
+            "counts": [
+              2,
+              1,
+              1
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "kind": "symbols",
+      "steps": [
+        {
+          "input": "snapshot",
+          "document": "",
+          "ranges": [],
+          "hint": {
+            "options": [
+              "1",
+              "2"
+            ],
+            "current": 0
+          },
+          "popup": {
+            "open": false,
+            "counts": [
+              1,
+              0,
+              1
+            ]
+          }
+        },
+        {
+          "input": "snapshot",
+          "document": "",
+          "ranges": [],
+          "hint": {
+            "options": [
+              "1",
+              "2"
+            ],
+            "current": 0
+          },
+          "popup": {
+            "open": true,
+            "counts": [
+              1,
+              1,
+              0
+            ]
+          }
+        },
+        {
+          "input": "snapshot",
+          "document": "",
+          "ranges": [],
+          "hint": {
+            "options": [
+              "1",
+              "2"
+            ],
+            "current": 0
+          },
+          "popup": {
+            "open": false,
+            "counts": [
+              2,
+              1,
+              1
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "kind": "candidates",
+      "steps": [
+        {
+          "input": "snapshot",
+          "document": "",
+          "ranges": [],
+          "hint": {
+            "options": [
+              "1",
+              "2"
+            ],
+            "current": 0
+          },
+          "popup": {
+            "open": false,
+            "counts": [
+              1,
+              0,
+              1
+            ]
+          }
+        },
+        {
+          "input": "snapshot",
+          "document": "",
+          "ranges": [],
+          "hint": {
+            "options": [
+              "1",
+              "2"
+            ],
+            "current": 0
+          },
+          "popup": {
+            "open": true,
+            "counts": [
+              1,
+              1,
+              0
+            ]
+          }
+        },
+        {
+          "input": "snapshot",
+          "document": "",
+          "ranges": [],
+          "hint": null,
+          "popup": {
+            "open": false,
+            "counts": [
+              1,
+              1,
+              0
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "kind": "symbols",
+      "steps": [
+        {
+          "input": "snapshot",
+          "document": "",
+          "ranges": [],
+          "hint": {
+            "options": [
+              "1",
+              "2"
+            ],
+            "current": 0
+          },
+          "popup": {
+            "open": false,
+            "counts": [
+              1,
+              0,
+              1
+            ]
+          }
+        },
+        {
+          "input": "snapshot",
+          "document": "",
+          "ranges": [],
+          "hint": {
+            "options": [
+              "1",
+              "2"
+            ],
+            "current": 0
+          },
+          "popup": {
+            "open": true,
+            "counts": [
+              1,
+              1,
+              0
+            ]
+          }
+        },
+        {
+          "input": "snapshot",
+          "document": "",
+          "ranges": [],
+          "hint": null,
+          "popup": {
+            "open": false,
+            "counts": [
+              1,
+              1,
+              0
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

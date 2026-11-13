@@ -1,0 +1,24 @@
+twpotato: the engine and the model assets of TwPotato (地瓜輸入法), a bopomofo input method.
+Source code: @HOMEPAGE@
+
+This package holds the engine program (/usr/lib/twpotato/twime-engined) and the model and dictionary files
+(/usr/share/twpotato/assets). It contains no input method framework and links to none.
+
+TwPotato's own code is under the MIT license (the text is at the end of this file).
+
+Third-party parts in this package, and where their notices are (all in this directory):
+
+  THIRD-PARTY-NOTICES.md    the dictionary and emoji data in the assets, and the Rust crates linked into the
+                            programs of TwPotato. The file is the one of the whole project: it also lists crates and
+                            components that only the Windows version has. The crates in the Linux programs
+                            (twime-engined, and the front-end library inside fcitx5-twpotato and ibus-twpotato) are a
+                            subset of that list; package.sh checks this when the packages are built.
+  LICENSE-McBopomofo.txt    the McBopomofo dictionary (MIT)
+  COPYING-libtabe.txt       the libtabe phrase list the dictionary derives from
+  LICENSE-UNICODE-3.0.txt   the Unicode data the emoji table derives from
+
+The engine is linked dynamically to the C library and the compiler runtime of the operating system (glibc, libgcc);
+they are not part of this package.
+
+----------------------------------------------------------------------------------------------------------------------
+@LICENSE@

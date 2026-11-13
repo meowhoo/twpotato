@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleDevelopmentRegion</key>
+    <string>zh-Hant</string>
+    <key>CFBundleExecutable</key>
+    <string>TwPotato</string>
+    <key>CFBundleIdentifier</key>
+    <string>tw.potato.inputmethod.TwPotato</string>
+    <key>CFBundleInfoDictionaryVersion</key>
+    <string>6.0</string>
+    <key>CFBundleName</key>
+    <string>TwPotato</string>
+    <key>CFBundleDisplayName</key>
+    <string>地瓜輸入法</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>CFBundleShortVersionString</key>
+    <string>0.1.0</string>
+    <key>CFBundleVersion</key>
+    <string>1</string>
+    <key>LSMinimumSystemVersion</key>
+    <string>14.0</string>
+    <!-- A background application: no Dock icon, no menu bar of its own. -->
+    <key>LSBackgroundOnly</key>
+    <true/>
+    <key>NSPrincipalClass</key>
+    <string>NSApplication</string>
+    <key>NSHighResolutionCapable</key>
+    <true/>
+    <!-- Input method: the connection the system's text input opens, and the controller class it instantiates. -->
+    <key>InputMethodConnectionName</key>
+    <string>tw.potato.inputmethod.TwPotato_Connection</string>
+    <key>InputMethodServerControllerClass</key>
+    <string>TwPotatoInputController</string>
+    <key>TISInputSourceID</key>
+    <string>tw.potato.inputmethod.TwPotato</string>
+    <key>TISIntendedLanguage</key>
+    <string>zh-Hant</string>
+    <key>tsInputMethodCharacterRepertoireKey</key>
+    <array>
+        <string>Hant</string>
+    </array>
+</dict>
+</plist>

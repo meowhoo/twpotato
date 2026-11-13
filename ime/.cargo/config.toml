@@ -1,0 +1,3 @@
+# The TSF DLL is loaded into every host process: link the C runtime statically.
+[target.x86_64-pc-windows-msvc]
+rustflags = ["-C", "target-feature=+crt-static"]

@@ -1,0 +1,61 @@
+# Local only: source texts have no confirmed license (see data/MANIFEST.md)
+/data/
+# Clones of other repositories (forks live on GitHub separately)
+upstream/
+# Build output
+target/
+# Full Codex run logs; the review results are kept as .md
+plans/reviews/*.log
+train/.venv/
+__pycache__/
+# Model weights and packed tables stay out of git unless added deliberately
+*.npz
+*.pack
+/ime/target-norm/
+target-*/
+# Codex review completion markers
+plans/reviews/.*.done
+
+# Article collector (collect/): dependencies, logs and process files stay local
+/collect/node_modules/
+/collect/*.log
+/collect/*-process.json
+
+# Local backups made before edits
+*.pre-*
+
+# RELEASE build outputs (MSI, staging; large, never committed)
+release/out/
+
+# RELEASE P4: stages, settings-app build output, installers, secrets
+ime/stage-*/
+ime/settings-app/node_modules/
+ime/settings-app/dist/
+ime/settings-app/src-tauri/gen/
+*.msi
+*.wixpdb
+*.cab
+*.jsonl
+*.pfx
+*.p12
+*.snk
+.env
+
+# Backups / build outputs / binaries (never committed)
+*.old-install
+*.gpu*-patch
+/ime/target*/
+/ime/stage*/
+*.exe
+*.dll
+*.bin
+*.twg*
+*.fst
+*.lst
+*.log
+!plans/reviews/*.md
+!/ime/crates/twime-model/tests/fixtures/*.bin
+!/ime/crates/twime-core/tests/fixtures/*.bin
+
+# macOS front end: build output (the app bundle with the assets, the test program)
+/ime/macos/build/

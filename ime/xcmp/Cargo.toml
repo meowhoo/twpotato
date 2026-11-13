@@ -1,0 +1,21 @@
+[package]
+name = "xcmp"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+publish = false
+
+# A tool of its own, outside the product workspace (its lock file and target directory stay here).
+[workspace]
+
+[dependencies]
+twime-core = { path = "../crates/twime-core" }
+twime-proto = { path = "../crates/twime-proto" }
+twime-winpipe = { path = "../crates/twime-winpipe" }
+
+# The peak resident memory of the engine (wait4).
+[target.'cfg(target_os = "macos")'.dependencies]
+libc = "0.2"
+
+[profile.release]
+debug = false

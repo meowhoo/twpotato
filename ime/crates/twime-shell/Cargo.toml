@@ -1,0 +1,18 @@
+[package]
+name = "twime-shell"
+version = "0.1.9"
+edition = "2024"
+license = "MIT"
+publish = false
+
+# Everything the Linux / macOS front ends share, behind a C interface (include/twime_shell.h).
+# Unix only: on Windows the crate compiles to nothing (the Windows shell is twime-tsf).
+[lib]
+crate-type = ["staticlib", "rlib"]
+
+[dependencies]
+twime-proto = { path = "../twime-proto" }
+twime-winpipe = { path = "../twime-winpipe" }
+
+[target.'cfg(unix)'.dependencies]
+libc = "0.2"

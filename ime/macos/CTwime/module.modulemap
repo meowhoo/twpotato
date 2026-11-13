@@ -1,0 +1,5 @@
+// The C interface of libtwime_shell.a, as it is in the crate (not a copy).
+module CTwime {
+    header "../../crates/twime-shell/include/twime_shell.h"
+    export *
+}

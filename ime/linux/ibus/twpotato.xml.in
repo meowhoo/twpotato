@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component>
+    <name>org.freedesktop.IBus.TwPotato</name>
+    <description>TwPotato bopomofo input method</description>
+    <exec>@TWPOTATO_EXEC@</exec>
+    <version>@PROJECT_VERSION@</version>
+    <author>TwPotato</author>
+    <license>MIT</license>
+    <homepage></homepage>
+    <textdomain>twpotato</textdomain>
+    <engines>
+        <engine>
+            <name>twpotato</name>
+            <language>zh_TW</language>
+            <license>MIT</license>
+            <author>TwPotato</author>
+            <layout>us</layout>
+            <longname>地瓜輸入法</longname>
+            <description>地瓜輸入法（注音）</description>
+            <symbol>中</symbol>
+            <icon>ibus-keyboard</icon>
+            <rank>80</rank>
+        </engine>
+    </engines>
+</component>

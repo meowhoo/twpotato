@@ -1,0 +1,9 @@
+[Addon]
+Name=TwPotato
+Name[zh_TW]=地瓜輸入法
+Category=InputMethod
+Version=@PROJECT_VERSION@
+Type=SharedLibrary
+Library=@TWPOTATO_ADDON_LIBRARY@
+OnDemand=True
+Configurable=False

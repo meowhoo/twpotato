@@ -1,0 +1,8 @@
+[package]
+name = "twime-proto"
+version = "0.1.9"
+edition = "2024"
+license = "MIT"
+publish = false
+
+[dependencies]

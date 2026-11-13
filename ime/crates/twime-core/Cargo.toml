@@ -1,0 +1,11 @@
+[package]
+name = "twime-core"
+version = "0.1.9"
+edition = "2024"
+license = "MIT"
+publish = false
+
+[dependencies]
+twime-userdata = { path = "../twime-userdata" }
+twime-model = { path = "../twime-model" }
+twime-proto = { path = "../twime-proto" }

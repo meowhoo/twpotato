@@ -1,0 +1,11 @@
+{
+  "session_source_sha256": "1ecf02ea6eaef16ed7280ec70ba0d76c770a9bc19dba9ed292167cccdde861a7",
+  "user_source_sha256": "e46ee4021fdd7922870f943cdbcfad20c619351d6ed4ed4d26be841e13d12ecf",
+  "adaptations": 1,
+  "fixture_sha256": "168740dcf60caa99573784537307d80f492445841dd408754f785c232ff3288d",
+  "frames": 420,
+  "bytes": 15114,
+  "scenarios": 9,
+  "ux_modes": 2,
+  "wire_versions": 5
+}

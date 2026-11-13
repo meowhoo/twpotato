@@ -1,0 +1,6 @@
+{
+  "identifier": "main",
+  "description": "設定視窗；檔案對話框只由 Rust 指令開啟。",
+  "windows": ["main"],
+  "permissions": []
+}

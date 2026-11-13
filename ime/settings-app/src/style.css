@@ -1,0 +1,22 @@
+:root { font-family: system-ui, sans-serif; color: #1c2b32; background: #f4f6f7; font-size: 14px; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+main { max-width: 1000px; padding: 20px 28px 32px; margin: auto; }
+h1 { font-size: 23px; margin: 0 0 8px; } h2 { font-size: 17px; margin: 0 0 12px; }
+p { margin: 7px 0; } #status { font-weight: 600; }
+nav { display: flex; gap: 8px; border-bottom: 1px solid #cad3d7; padding: 12px 0; }
+button, input, select { font: inherit; border: 1px solid #abbac1; border-radius: 5px; padding: 7px 10px; background: white; color: inherit; }
+button { cursor: pointer; } button:hover { background: #e5edf0; } button[aria-pressed=true] { background: #215d70; color: white; border-color: #215d70; }
+button:disabled { cursor: default; opacity: .5; } :focus-visible { outline: 3px solid #277e9b; outline-offset: 2px; }
+label { display: flex; align-items: center; gap: 8px; } .toolbar { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin: 12px 0; }
+#search { width: 230px; } #word { width: 160px; } #weight { width: 105px; }
+.table-wrap { overflow: auto; max-height: 280px; border: 1px solid #cad3d7; border-radius: 5px; background: white; }
+table { border-collapse: collapse; width: 100%; text-align: left; } th { background: #eaf0f2; position: sticky; top: 0; } th, td { padding: 8px 12px; border-bottom: 1px solid #e2e8eb; } td:nth-child(2) { overflow-wrap: anywhere; }
+.pager { display: flex; justify-content: center; gap: 16px; align-items: center; margin: 12px 0; }
+#add-form { border-top: 1px solid #cad3d7; padding-top: 16px; } #reading-selects label { flex-direction: column; gap: 4px; }
+#settings-form { display: grid; gap: 18px; padding-top: 16px; max-width: 470px; } #settings-form > label { justify-content: space-between; } #settings-form button { justify-self: start; min-width: 90px; }
+.muted { color: #566970; } .warning { color: #8b351b; } #message { white-space: pre-wrap; line-height: 1.6; overflow-wrap: anywhere; }
+[hidden] { display: none !important; } .check { justify-content: flex-start !important; } #status-note { font-size: 12px; overflow-wrap: anywhere; }
+#reading-selects input { width: 88px; } #reading-selects input.active { outline: 2px solid #277e9b; } #reading-selects span { font-size: 12px; min-height: 1em; }
+.keyboard { display: grid; grid-template-columns: repeat(13, minmax(30px, 1fr)); gap: 4px; max-width: 620px; margin: 8px 0; } .keyboard button { padding: 5px 0; }
+#autocomp-form { display: grid; gap: 12px; padding-top: 16px; margin-top: 18px; border-top: 1px solid #cad3d7; max-width: 470px; } #autocomp-form h2 { margin: 0; font-size: 1.1em; } #autocomp-form .toolbar { margin: 0; }

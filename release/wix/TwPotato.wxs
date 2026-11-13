@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  地瓜輸入法 (TwPotato) per-machine MSI, WiX Toolset v5.
+  Build with release/build-msi.ps1. Preprocessor variables (all required unless noted):
+    Version      product version, e.g. 0.1.0
+    ProductCode  derived from Version by build-msi.ps1, so every build of one version (including the
+                 fail-test builds) is the same product and a test build can be applied as a repair
+    BinDir       directory with twime_tsf.dll, twime-engined.exe, twime-settings.exe, twime-setup.exe
+    AssetsDir    model and dictionary assets (checked against release/model.lock by build-msi.ps1)
+    DocsDir      LICENSE.txt, THIRD-PARTY-NOTICES.md, LICENSE-McBopomofo.txt, COPYING-libtabe.txt, LICENSE-UNICODE-3.0.txt
+    IconFile     .ico for Add/Remove Programs
+    FailTest     optional, test builds only: 1 = Register fails after the first category,
+                 2 = failure after Register, 3 = failure after Unregister (plain uninstall)
+-->
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <?define TsfDllName = "twime_tsf-$(var.Version).dll" ?>
+  <Package Name="地瓜輸入法" Manufacturer="meowhoo" Version="$(var.Version)" ProductCode="$(var.ProductCode)"
+           UpgradeCode="{6342DBCA-A4B4-4B68-99F5-67C0CF412F32}" Scope="perMachine"
+           Language="1028" Codepage="950" InstallerVersion="500" Compressed="yes">
+    <SummaryInformation Description="地瓜輸入法 TwPotato" Manufacturer="meowhoo" Codepage="950" />
+    <MediaTemplate EmbedCab="yes" CompressionLevel="high" />
+    <MajorUpgrade Schedule="afterInstallInitialize"
+                  DowngradeErrorMessage="已安裝較新版本的地瓜輸入法。" />
+
+    <Property Id="MSIRESTARTMANAGERCONTROL" Value="Disable" />
+    <Property Id="ARPHELPLINK" Value="https://github.com/meowhoo/twpotato" />
+    <Property Id="ARPURLINFOABOUT" Value="https://github.com/meowhoo/twpotato" />
+    <Icon Id="TwPotatoIcon" SourceFile="$(var.IconFile)" />
+    <Property Id="ARPPRODUCTICON" Value="TwPotatoIcon" />
+
+    <!-- State before any change (section 2.3). Bitness: the 64-bit registry view. -->
+    <!-- Secure: the values found by the UI sequence reach the server-side execute sequence (section 2.4a). -->
+    <Property Id="TIPPRESENT" Secure="yes">
+      <RegistrySearch Root="HKLM" Bitness="always64" Type="raw" Name="Description"
+                      Key="SOFTWARE\Microsoft\CTF\TIP\{C2DD0C9B-F6E9-489D-9ADF-F97658502774}\LanguageProfile\0x00000404\{DDDAD6E8-B6B8-4941-A61B-7BB8046D7AED}" />
+    </Property>
+    <Property Id="OLDDLL" Secure="yes">
+      <RegistrySearch Root="HKLM" Bitness="always64" Type="raw"
+                      Key="SOFTWARE\Classes\CLSID\{C2DD0C9B-F6E9-489D-9ADF-F97658502774}\InprocServer32" />
+    </Property>
+    <Property Id="USERMODE" Secure="yes">
+      <RegistrySearch Root="HKCU" Bitness="always64" Type="raw"
+                      Key="Software\Classes\CLSID\{C2DD0C9B-F6E9-489D-9ADF-F97658502774}\InprocServer32" />
+    </Property>
+    <!-- State of an earlier user-mode migration record of this user (section 2.4a). -->
+    <Property Id="MIGRATEPENDING" Secure="yes">
+      <RegistrySearch Root="HKCU" Bitness="always64" Type="raw" Name="state" Key="Software\TwPotato\Migrate" />
+    </Property>
+
+    <Launch Condition="NOT RollbackDisabled"
+            Message="此電腦停用了 Windows Installer 的回滾功能，地瓜輸入法無法安全安裝。" />
+    <Launch Condition="(Installed AND REMOVE~=&quot;ALL&quot;) OR NOT MIGRATEPENDING OR MIGRATEPENDING=&quot;committed&quot;"
+            Message="上次把使用者模式安裝改為全機安裝的作業沒有完成。請依 README「使用者模式遷移未完成」的步驟處理後再安裝。" />
+
+    <StandardDirectory Id="ProgramFiles64Folder">
+      <Directory Id="INSTALLDIR" Name="TwPotato">
+        <Directory Id="AssetsDir" Name="assets" />
+      </Directory>
+    </StandardDirectory>
+    <StandardDirectory Id="ProgramMenuFolder" />
+
+    <ComponentGroup Id="Main" Directory="INSTALLDIR">
+      <!-- The DLL name carries the version: an upgrade never has to replace a DLL that a host still has loaded. -->
+      <Component Bitness="always64">
+        <File Id="TsfDll" Source="$(var.BinDir)\twime_tsf.dll" Name="$(var.TsfDllName)" KeyPath="yes" />
+        <RegistryKey Root="HKLM" Key="SOFTWARE\Classes\CLSID\{C2DD0C9B-F6E9-489D-9ADF-F97658502774}">
+          <RegistryValue Type="string" Value="TwPotato TSF text input processor" />
+          <RegistryKey Key="InprocServer32">
+            <RegistryValue Type="string" Value="[#TsfDll]" />
+            <RegistryValue Type="string" Name="ThreadingModel" Value="Apartment" />
+          </RegistryKey>
+        </RegistryKey>
+      </Component>
+      <Component Bitness="always64">
+        <File Id="EngineExe" Source="$(var.BinDir)\twime-engined.exe" KeyPath="yes" />
+      </Component>
+      <Component Bitness="always64">
+        <File Id="SettingsExe" Source="$(var.BinDir)\twime-settings.exe" KeyPath="yes">
+          <Shortcut Id="SettingsShortcut" Directory="ProgramMenuFolder" Name="地瓜輸入法 設定"
+                    Description="地瓜輸入法 設定" WorkingDirectory="INSTALLDIR" Advertise="no" />
+        </File>
+      </Component>
+      <Component Bitness="always64">
+        <File Id="UserDataOn" Source="$(sys.SOURCEFILEDIR)user-data.on" Name="user-data.on" KeyPath="yes" />
+      </Component>
+      <Component Bitness="always64">
+        <File Id="License" Source="$(var.DocsDir)\LICENSE.txt" KeyPath="yes" />
+      </Component>
+      <Component Bitness="always64">
+        <File Id="Notices" Source="$(var.DocsDir)\THIRD-PARTY-NOTICES.md" KeyPath="yes" />
+      </Component>
+      <Component Bitness="always64">
+        <File Id="McBopomofoLicense" Source="$(var.DocsDir)\LICENSE-McBopomofo.txt" KeyPath="yes" />
+      </Component>
+      <Component Bitness="always64">
+        <File Id="LibtabeCopying" Source="$(var.DocsDir)\COPYING-libtabe.txt" KeyPath="yes" />
+      </Component>
+      <Component Bitness="always64">
+        <File Id="UnicodeLicense" Source="$(var.DocsDir)\LICENSE-UNICODE-3.0.txt" KeyPath="yes" />
+      </Component>
+    </ComponentGroup>
+    <ComponentGroup Id="Assets" Directory="AssetsDir">
+      <Files Include="$(var.AssetsDir)\*" />
+    </ComponentGroup>
+
+    <Feature Id="Product" Title="地瓜輸入法" AllowAbsent="no">
+      <ComponentGroupRef Id="Main" />
+      <ComponentGroupRef Id="Assets" />
+    </Feature>
+
+    <!-- Helper from the Binary table: present in every phase, independent of the installed files. -->
+    <Binary Id="SetupHelper" SourceFile="$(var.BinDir)\twime-setup.exe" />
+
+    <!-- TIPFLAG = 1 when the profile was registered before this transaction. -->
+    <SetProperty Id="TIPFLAG" Value="1" After="AppSearch" Sequence="execute" Condition="TIPPRESENT" />
+    <Property Id="TIPFLAG" Value="0" />
+    <!-- Section 2.4a: one identifier per installation for the three migration commands; a user-mode profile that was
+         registered in HKLM (elevated user-mode install, no HKLM COM) rolls back with the user-mode DLL as its icon. -->
+    <SetProperty Id="MIGRATETOKEN" Value="[ProductCode];[Date];[Time]" After="AppSearch" Sequence="execute" />
+    <SetProperty Id="OLDDLL" Value="[USERMODE]" After="AppSearch" Sequence="execute" Condition="NOT OLDDLL AND USERMODE AND TIPPRESENT" />
+
+    <!-- "[INSTALLDIR]." keeps a trailing backslash from escaping the closing quote; the helper drops the "." component.
+         The rollback actions name the DLL by its installed path instead of [#TsfDll]: [#TsfDll] is empty when the
+         component is being removed (plain uninstall), and the helper needs an absolute fallback path. -->
+    <?define RbDll = "[INSTALLDIR]$(var.TsfDllName)" ?>
+    <CustomAction Id="RbRelease" BinaryRef="SetupHelper" ExeCommand="machine-release --root &quot;[INSTALLDIR].&quot;"
+                  Execute="rollback" Impersonate="no" Return="check" />
+    <CustomAction Id="Stop" BinaryRef="SetupHelper" ExeCommand="machine-stop --root &quot;[INSTALLDIR].&quot;"
+                  Execute="deferred" Impersonate="no" Return="check" />
+    <CustomAction Id="RbUnregister" BinaryRef="SetupHelper"
+                  ExeCommand="machine-rollback-register --tip-present [TIPFLAG] --old-dll &quot;[OLDDLL]&quot; --dll &quot;$(var.RbDll)&quot;"
+                  Execute="rollback" Impersonate="no" Return="check" />
+    <CustomAction Id="Unregister" BinaryRef="SetupHelper" ExeCommand="machine-unregister"
+                  Execute="deferred" Impersonate="no" Return="check" />
+    <CustomAction Id="RbRegister" BinaryRef="SetupHelper"
+                  ExeCommand="machine-rollback-register --tip-present [TIPFLAG] --old-dll &quot;[OLDDLL]&quot; --dll &quot;$(var.RbDll)&quot;"
+                  Execute="rollback" Impersonate="no" Return="check" />
+<?if $(var.FailTest) = 1 ?>
+    <CustomAction Id="Register" BinaryRef="SetupHelper"
+                  ExeCommand="machine-register --dll &quot;[#TsfDll]&quot; --test-fail-after-categories 1"
+                  Execute="deferred" Impersonate="no" Return="check" />
+<?else?>
+    <CustomAction Id="Register" BinaryRef="SetupHelper" ExeCommand="machine-register --dll &quot;[#TsfDll]&quot;"
+                  Execute="deferred" Impersonate="no" Return="check" />
+<?endif?>
+    <CustomAction Id="Release" BinaryRef="SetupHelper" ExeCommand="machine-release --root &quot;[INSTALLDIR].&quot;"
+                  Execute="commit" Impersonate="no" Return="ignore" />
+    <!-- Section 2.4a: the only actions that run as the installing user (Impersonate=yes). -->
+    <CustomAction Id="RbUserMigrate" BinaryRef="SetupHelper" ExeCommand="user-migrate-restore --token &quot;[MIGRATETOKEN]&quot;"
+                  Execute="rollback" Impersonate="yes" Return="check" />
+    <CustomAction Id="UserMigrate" BinaryRef="SetupHelper"
+                  ExeCommand="user-migrate-prepare --expect-dll &quot;[USERMODE]&quot; --token &quot;[MIGRATETOKEN]&quot;"
+                  Execute="deferred" Impersonate="yes" Return="check" />
+    <CustomAction Id="UserMigrateFinish" BinaryRef="SetupHelper" ExeCommand="user-migrate-finish --token &quot;[MIGRATETOKEN]&quot;"
+                  Execute="commit" Impersonate="yes" Return="ignore" />
+    <CustomAction Id="UserMigrateRetry" BinaryRef="SetupHelper" ExeCommand="user-migrate-finish"
+                  Execute="commit" Impersonate="yes" Return="ignore" />
+<?if $(var.FailTest) = 2 OR $(var.FailTest) = 3 ?>
+    <!-- An unknown command makes the helper exit with 1. -->
+    <CustomAction Id="FailTest" BinaryRef="SetupHelper" ExeCommand="fail-test-injected"
+                  Execute="deferred" Impersonate="no" Return="check" />
+<?endif?>
+
+    <InstallExecuteSequence>
+      <Custom Action="RbRelease" After="RemoveExistingProducts" Condition="NOT WIX_UPGRADE_DETECTED" />
+      <Custom Action="Stop" After="RbRelease" />
+      <Custom Action="RbUnregister" After="Stop" Condition="REMOVE~=&quot;ALL&quot; AND NOT UPGRADINGPRODUCTCODE" />
+      <Custom Action="Unregister" After="RbUnregister" Condition="REMOVE~=&quot;ALL&quot; AND NOT UPGRADINGPRODUCTCODE" />
+      <Custom Action="RbUserMigrate" After="Unregister" Condition="USERMODE AND NOT REMOVE~=&quot;ALL&quot;" />
+      <Custom Action="UserMigrate" After="RbUserMigrate" Condition="USERMODE AND NOT REMOVE~=&quot;ALL&quot;" />
+      <Custom Action="RbRegister" After="WriteRegistryValues" Condition="NOT REMOVE~=&quot;ALL&quot;" />
+      <Custom Action="Register" After="RbRegister" Condition="NOT REMOVE~=&quot;ALL&quot;" />
+<?if $(var.FailTest) = 2 ?>
+      <Custom Action="FailTest" After="Register" Condition="NOT REMOVE~=&quot;ALL&quot;" />
+<?elseif $(var.FailTest) = 3 ?>
+      <Custom Action="FailTest" After="UserMigrate" Condition="REMOVE~=&quot;ALL&quot; AND NOT UPGRADINGPRODUCTCODE" />
+<?endif?>
+      <Custom Action="UserMigrateFinish" Before="Release" Condition="USERMODE AND NOT REMOVE~=&quot;ALL&quot;" />
+      <Custom Action="UserMigrateRetry" After="UserMigrateFinish" Condition="MIGRATEPENDING=&quot;committed&quot; AND NOT USERMODE AND NOT REMOVE~=&quot;ALL&quot;" />
+      <Custom Action="Release" Before="InstallFinalize" />
+    </InstallExecuteSequence>
+  </Package>
+</Wix>

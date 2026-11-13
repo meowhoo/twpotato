@@ -1,0 +1,125 @@
+# Build, test and package TwPotato. The same scripts run locally (release/*.ps1).
+# The model assets come from the GitHub Release named in release/model.lock and are verified before use.
+name: build
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: never
+  WIX_VERSION: 5.0.2
+  CARGO_ABOUT_VERSION: 0.9.2
+  CARGO_ABOUT_SHA256: 1c03e5890238562497c2d89a3b75b02560af349c1fc3e713d3284f532a5cd748
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 20.10.0
+      - uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Tools (Rust from rust-toolchain.toml, WiX, cargo-about)
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          rustup show active-toolchain
+          dotnet tool install --global wix --version $env:WIX_VERSION
+          $u = "https://github.com/EmbarkStudios/cargo-about/releases/download/$env:CARGO_ABOUT_VERSION/cargo-about-$env:CARGO_ABOUT_VERSION-x86_64-pc-windows-msvc.tar.gz"
+          $t = Join-Path $env:RUNNER_TEMP 'cargo-about.tar.gz'
+          Invoke-WebRequest -UseBasicParsing $u -OutFile $t
+          if ((Get-FileHash $t -Algorithm SHA256).Hash.ToLower() -ne $env:CARGO_ABOUT_SHA256) { throw 'cargo-about download hash mismatch' }
+          $d = Join-Path $env:RUNNER_TEMP 'cargo-about'
+          New-Item -ItemType Directory -Force $d | Out-Null
+          tar -xzf $t -C $d
+          "CARGO_ABOUT=$d\cargo-about-$env:CARGO_ABOUT_VERSION-x86_64-pc-windows-msvc\cargo-about.exe" | Out-File -Append -Encoding utf8 $env:GITHUB_ENV
+
+      - name: Version
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $v = ((Get-Content ime\crates\twime-tsf\Cargo.toml) -match '^version = ' | Select-Object -First 1) -replace '^version = "(.*)"$', '$1'
+          if ($env:GITHUB_REF_TYPE -eq 'tag' -and $env:GITHUB_REF_NAME -ne "v$v") { throw "tag $env:GITHUB_REF_NAME does not match crate version $v" }
+          "VERSION=$v" | Out-File -Append -Encoding utf8 $env:GITHUB_ENV
+
+      - name: Test (tests that need the private model or data files skip themselves)
+        working-directory: ime
+        run: cargo test --workspace --locked
+
+      - name: Third-party notices match Cargo.lock
+        shell: powershell
+        run: '& release\notices.ps1 -CargoAbout $env:CARGO_ABOUT -Check'
+
+      - name: Build TSF, engine, setup
+        working-directory: ime
+        run: cargo build --release --locked -p twime-tsf -p twime-engined -p twime-setup
+
+      - name: Build settings app
+        working-directory: ime/settings-app
+        run: |
+          npm ci
+          npm run build
+          node --test src/main.test.mjs src/reading.test.mjs scripts/main.test.mjs
+          cd src-tauri
+          cargo build --release --locked
+
+      - name: Model assets (download and verify against release/model.lock)
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $url = ((Get-Content release\model.lock) -match '^url ' | Select-Object -First 1).Split(' ')[1]
+          $zip = Join-Path $env:RUNNER_TEMP 'model.zip'
+          Invoke-WebRequest -UseBasicParsing $url -OutFile $zip
+          & release\pack-model.ps1 -Zip $zip -OutDir "$env:RUNNER_TEMP\assets"
+
+      # Signing (placeholder; enabled once the SignPath Foundation application is approved, see release/signpath/):
+      # upload the unsigned DLL/EXE as an artifact, submit them to SignPath with
+      # signpath/github-action-submit-signing-request (pinned by SHA), wait for the manual approval, download the
+      # signed files into the bin directory below, build the MSI, then sign the MSI the same way.
+
+      - name: MSI
+        shell: powershell
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $bin = "$env:RUNNER_TEMP\bin"
+          New-Item -ItemType Directory -Force $bin | Out-Null
+          Copy-Item ime\target\release\twime_tsf.dll, ime\target\release\twime-engined.exe, ime\target\release\twime-setup.exe, ime\settings-app\src-tauri\target\release\twime-settings.exe $bin
+          & release\build-msi.ps1 -Version $env:VERSION -BinDir $bin -AssetsDir "$env:RUNNER_TEMP\assets" -OutDir "$env:RUNNER_TEMP\out"
+          & release\check-msi.ps1 -Msi "$env:RUNNER_TEMP\out\TwPotato-$env:VERSION-x64.msi" -Version $env:VERSION -AssetsDir "$env:RUNNER_TEMP\assets"
+          if ($LASTEXITCODE -ne 0) { throw 'check-msi failed' }
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: TwPotato-msi
+          path: |
+            ${{ runner.temp }}/out/TwPotato-*-x64.msi
+            ${{ runner.temp }}/out/TwPotato-*-x64.msi.sha256
+          if-no-files-found: error
+
+  release:
+    if: github.ref_type == 'tag'
+    needs: build
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: TwPotato-msi
+          path: msi
+      - name: Draft release (published by hand after review)
+        shell: powershell
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create $env:GITHUB_REF_NAME (Get-ChildItem msi -File).FullName --draft --verify-tag --repo $env:GITHUB_REPOSITORY --title "地瓜輸入法 $env:GITHUB_REF_NAME" --notes "未簽章的建置。SHA-256 見 .sha256 檔。"
