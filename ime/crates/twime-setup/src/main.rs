@@ -1064,8 +1064,10 @@ mod tests {
                 link.GetWorkingDirectory(&mut working).unwrap();
                 link.GetDescription(&mut description).unwrap();
                 let decode = |v: &[u16]| String::from_utf16_lossy(&v[..v.iter().position(|c| *c == 0).unwrap()]);
-                assert_eq!(PathBuf::from(decode(&target)), dir.join(SETTINGS_EXE));
-                assert_eq!(PathBuf::from(decode(&working)), dir);
+                // Compare resolved paths: TEMP may be an 8.3 short path (e.g. RUNNER~1 on CI runners) that the link stores long.
+                let same = |a: PathBuf, b: PathBuf| assert_eq!(fs::canonicalize(a).unwrap(), fs::canonicalize(b).unwrap());
+                same(PathBuf::from(decode(&target)), dir.join(SETTINGS_EXE));
+                same(PathBuf::from(decode(&working)), dir.clone());
                 assert_eq!(decode(&description), "地瓜輸入法 設定");
             }
             CoUninitialize();
