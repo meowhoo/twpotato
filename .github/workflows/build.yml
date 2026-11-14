@@ -119,7 +119,7 @@ jobs:
           name: TwPotato-msi
           path: msi
       - name: Draft release (published by hand after review)
-        shell: powershell
+        shell: pwsh  # PowerShell 7 reads the step script as UTF-8 (5.1 garbles the Chinese title and notes)
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh release create $env:GITHUB_REF_NAME (Get-ChildItem msi -File).FullName --draft --verify-tag --repo $env:GITHUB_REPOSITORY --title "地瓜輸入法 $env:GITHUB_REF_NAME" --notes "未簽章的建置。SHA-256 見 .sha256 檔。"
