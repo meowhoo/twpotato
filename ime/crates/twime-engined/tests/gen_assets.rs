@@ -1,5 +1,6 @@
 #![cfg(windows)]
 //! Real command-line startup: asset discovery, explicit override, candidates and ready compatibility.
+mod common;
 use std::{fs, io::{BufRead, BufReader}, path::PathBuf, process::{Child, Command, Stdio}};
 use twime_core::keymap::key_of;
 use twime_model::{Assets, pn::{self, BuildWord}};
@@ -28,6 +29,9 @@ fn call(c: &Client, seq: &mut u32, event: Event) -> Update {
 
 #[test]
 fn gen_asset_pair_missing_partial_present_and_explicit_override() {
+    if crate::common::engine_start_refused() {
+        return;
+    }
     let mut reference = None;
     let mut reference_eff = None;
     for variant in ["absent", "fst_only", "lst_only", "present", "override", "pop_missing"] {

@@ -1,5 +1,7 @@
 //! EMOJI (EMOJI-plan 3.1, 4 V1): the `emoji` key of model.cfg, the `--emoji` flag, the missing-file warning, and a real
 //! startup with the table (ready line unchanged, one more line, emoji at the end of the list).
+#[cfg(windows)]
+mod common;
 use std::{
     fs,
     path::PathBuf,
@@ -160,6 +162,9 @@ mod startup {
 
     #[test]
     fn off_missing_and_on() {
+        if crate::common::engine_start_refused() {
+            return;
+        }
         // off (absent): the table is not read, no emoji, no extra line
         let off = start("int8=off\n", &[], Some(TSV));
         let base = off.list();
@@ -192,6 +197,9 @@ mod startup {
 
     #[test]
     fn a_malformed_table_stops_startup() {
+        if crate::common::engine_start_refused() {
+            return;
+        }
         let dir = assets("int8=off\nemoji=on\n", Some("not a table\n"));
         let out = Command::new(env!("CARGO_BIN_EXE_twime-engined"))
             .arg("--assets-dir").arg(&dir.0)

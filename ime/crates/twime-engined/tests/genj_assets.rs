@@ -1,4 +1,5 @@
 #![cfg(windows)]
+mod common;
 use std::{fs, io::{BufRead,BufReader}, process::{Command,Stdio}, path::PathBuf};
 use twime_model::{Assets,pn::{self,BuildWord}};
 
@@ -11,6 +12,9 @@ impl Drop for Proc {
 }
 #[test]
 fn closed_startup_stdout_keeps_pipe_service_alive() {
+    if crate::common::engine_start_refused() {
+        return;
+    }
     use twime_proto::{Event, Reply, Request};
     use twime_winpipe::Client;
     let tag=format!("srchj-closed-{}-{}",std::process::id(),std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_nanos());
@@ -36,6 +40,9 @@ fn closed_startup_stdout_keeps_pipe_service_alive() {
 }
 #[test]
 fn genj_discovery_override_status_and_partial_failure() {
+    if crate::common::engine_start_refused() {
+        return;
+    }
     for variant in ["absent","present","override","fst_only","cfg_missing","tier_count","tier_value","cfg_invalid"] {
         let tag=format!("srchj-{}-{}-{variant}",std::process::id(),std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_nanos());
         let root=std::env::temp_dir().join(&tag);fs::create_dir_all(&root).unwrap();

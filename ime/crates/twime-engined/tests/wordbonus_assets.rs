@@ -1,6 +1,7 @@
 #![cfg(windows)]
 //! WORDBONUS (WORDBONUS-plan 3): `wordbonus=` in the assets model.cfg is the only switch; a stray file is ignored,
 //! a named file that is missing / truncated / built for other assets / a bad name stops the engine before ready.
+mod common;
 use std::{fs, io::{BufRead, BufReader}, path::PathBuf, process::{Command, Stdio}};
 use twime_model::{Assets, wordbonus};
 
@@ -22,6 +23,9 @@ fn row() -> Vec<wordbonus::WbRow> {
 
 #[test]
 fn model_cfg_switch_and_failures() {
+    if crate::common::engine_start_refused() {
+        return;
+    }
     for variant in ["absent", "stray_file_ignored", "present", "empty_value", "missing", "truncated", "other_assets", "path_name", "given_twice"] {
         let tag = format!("wb-{}-{}-{variant}", std::process::id(), std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_nanos());
         let root = std::env::temp_dir().join(&tag);

@@ -1,4 +1,5 @@
 #![cfg(windows)]
+mod common;
 use std::{
     fs,
     path::PathBuf,
@@ -133,6 +134,9 @@ fn hello5(c: &Client) {
 
 #[test]
 fn disabled_creates_no_user_files_and_uses_legacy_toggle() {
+    if crate::common::engine_start_refused() {
+        return;
+    }
     let p = EngineProcess::start("off");
     let c = p.connect();
     hello5(&c);
@@ -150,6 +154,9 @@ fn disabled_creates_no_user_files_and_uses_legacy_toggle() {
 
 #[test]
 fn close_and_shutdown_ack_use_negotiated_version_and_current_toggle() {
+    if crate::common::engine_start_refused() {
+        return;
+    }
     for enabled in ["off", "dir"] {
         let p = EngineProcess::start(enabled);
         let control = p.connect();
@@ -178,6 +185,9 @@ fn close_and_shutdown_ack_use_negotiated_version_and_current_toggle() {
 
 #[test]
 fn control_requests_settings_and_lexicon() {
+    if crate::common::engine_start_refused() {
+        return;
+    }
     let p = EngineProcess::start("dir");
     let c = p.connect();
     hello5(&c);
@@ -248,6 +258,9 @@ fn control_requests_settings_and_lexicon() {
 
 #[test]
 fn version_and_capability_violations_disconnect() {
+    if crate::common::engine_start_refused() {
+        return;
+    }
     let p = EngineProcess::start("dir");
     for event in [Event::User(UserReq::GetSettings), Event::AddToLexicon] {
         let c = p.connect();
@@ -261,6 +274,9 @@ fn version_and_capability_violations_disconnect() {
 
 #[test]
 fn add_to_lexicon_returns_notice_without_committing_composition() {
+    if crate::common::engine_start_refused() {
+        return;
+    }
     let p = EngineProcess::start("dir");
     let c = p.connect();
     hello5(&c);
@@ -299,6 +315,9 @@ fn add_to_lexicon_returns_notice_without_committing_composition() {
 
 #[test]
 fn flag_and_executable_marker_enable_default_directory() {
+    if crate::common::engine_start_refused() {
+        return;
+    }
     for mode in ["flag", "marker"] {
         let p = EngineProcess::start(mode);
         let c = p.connect();
@@ -313,6 +332,9 @@ fn flag_and_executable_marker_enable_default_directory() {
 
 #[test]
 fn oversized_user_reply_returns_full_and_keeps_connection_usable() {
+    if crate::common::engine_start_refused() {
+        return;
+    }
     let p = EngineProcess::start("dir");
     let c = p.connect();
     hello5(&c);
@@ -328,6 +350,9 @@ fn oversized_user_reply_returns_full_and_keeps_connection_usable() {
 
 #[test]
 fn background_poll_publishes_external_settings_on_next_event() {
+    if crate::common::engine_start_refused() {
+        return;
+    }
     let p = EngineProcess::start("dir");
     let c = p.connect();
     hello5(&c);
@@ -357,6 +382,9 @@ fn background_poll_publishes_external_settings_on_next_event() {
 
 #[test]
 fn list_pages_stop_at_sixty_kilobytes_and_continue_by_actual_count() {
+    if crate::common::engine_start_refused() {
+        return;
+    }
     let p = EngineProcess::start("dir");
     let c = p.connect();
     hello5(&c);

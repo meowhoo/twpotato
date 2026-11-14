@@ -52,6 +52,7 @@ ime/crates/twime-engined/src/lib.rs
 ime/crates/twime-engined/src/main.rs
 ime/crates/twime-engined/src/runlock.rs
 ime/crates/twime-engined/tests/autocomp_user.rs
+ime/crates/twime-engined/tests/common/mod.rs
 ime/crates/twime-engined/tests/emoji_cfg.rs
 ime/crates/twime-engined/tests/gen_assets.rs
 ime/crates/twime-engined/tests/genj_assets.rs
