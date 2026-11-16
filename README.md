@@ -1,11 +1,62 @@
 # 地瓜輸入法（TwPotato）
 
-Sweet-potato Bopomofo IME for Taiwan — Windows 的注音輸入法，用一個在本機執行的小型神經網路模型，依前後文一次選出整句的字。
+給台灣人用的注音輸入法。打一整串注音，它會看前後文，一次把整句的字選好，同音字不用一個一個挑。
 
-- 授權：MIT（程式碼與模型權重；見 `LICENSE`、`MODEL_CARD.md`、`THIRD-PARTY-NOTICES.md`）
-- 隱私：不收集、不傳送任何資料，全部在本機運算（見 `PRIVACY.md`）
+- **免費開源**：MIT 授權，程式碼與模型都公開。
+- **完全離線**：所有運算都在你的電腦上，不連網、不收集任何資料（見 `PRIVACY.md`）。
+- **支援平台**：Windows 11 x64、Ubuntu 24.04／26.04（IBus、Fcitx5）。
 
-## 功能
+## 特點
+
+- **整句選字**：連續打一整句注音，同音字（例如 在／再、的／得）由前後文自動決定；選錯的字可以逐字改。
+- **台灣用語**：模型用台灣的文章訓練，用字、用詞以台灣習慣為準；常見的口語讀音（例如「們」讀 ㄇㄣˊ）也打得出來。
+- **輕聲可直接打**：例如 ㄇㄛ˙、ㄌㄜ˙。
+- **大千標準鍵盤**；中英切換鍵可選左／右 Shift；中文標點全形或半形。
+- **使用者詞庫**：可新增、搜尋、匯入、匯出自訂詞。
+- **emoji 候選**、小符號表；自動完成（預設關閉）。
+
+## 準確度
+
+用約 3 萬句沒有前文的短句測試，每打 1,000 個字的錯字數（越低越好）：
+
+| 輸入法 | 每千字錯字 | 整句全對 |
+|---|---:|---:|
+| 地瓜輸入法 0.1.9 | 44.2 | 86.5% |
+| 新酷音 | 57.3 | 83.1% |
+| 微軟注音 | 62.8 | 81.9% |
+
+測試方法、資料隔離與限制見 `MODEL_CARD.md`。另一組測試顯示，有前文時（接著前一句打）錯字約再少三成。
+
+## 速度與資源
+
+- 每次轉換最慢也在 5 毫秒內（p99 4.61 ms，x64 桌機），打字不會卡。
+- 記憶體約 200 MB；磁碟約 200 MB（模型與字典約 187 MB）。
+
+## 安裝
+
+### Windows 11
+
+1. 到 [Releases](https://github.com/meowhoo/twpotato/releases/latest) 下載 `TwPotato-<版本>-x64.msi`，執行安裝（需要系統管理員）。
+2. 開「設定 → 時間與語言 → 語言與地區」，在「中文（繁體，台灣）」→「語言選項」→「鍵盤」加入「地瓜輸入法」。
+3. 用 Win＋空白鍵切換到地瓜輸入法就可以打字。
+
+目前安裝檔還沒有程式碼簽章，Windows 會顯示「未知的發行者」，按「其他資訊 → 仍要執行」即可。
+
+### Ubuntu 24.04／26.04
+
+到 [Releases](https://github.com/meowhoo/twpotato/releases/latest) 下載與系統版本相符的 `twpotato` 和前端套件（Ubuntu 預設桌面用 `ibus-twpotato`），在下載的資料夾執行：
+
+```sh
+sudo apt install ./twpotato_*.deb ./ibus-twpotato_*.deb
+```
+
+登出再登入後，在「設定 → 鍵盤 → 輸入來源」加入「中文（台灣）→ 地瓜輸入法」。Fcitx5 與其他細節見 [`ime/linux/README.md`](ime/linux/README.md)。
+
+---
+
+以下是進階說明。
+
+## 功能細節
 
 - 標準（大千）注音鍵盤；整句選字，依前後文決定同音字；可逐字改選候選字。
 - 中英切換鍵（Shift 任一側／左 Shift／右 Shift／不使用）、預設模式、中文標點全形／半形、小符號表。
@@ -21,7 +72,7 @@ Sweet-potato Bopomofo IME for Taiwan — Windows 的注音輸入法，用一個�
 - 約 200 MB 磁碟空間（模型與字典約 187 MB）；引擎實測最大工作集約 196 MB。
 - 設定程式使用 Windows 內建的 Microsoft Edge WebView2 Runtime（Windows 11 已內建）。
 
-## 安裝
+## 詳細安裝說明（Windows）
 
 ### MSI（建議，全機安裝，需要系統管理員）
 
@@ -70,7 +121,7 @@ msiexec /x TwPotato-<版本>-x64.msi /qn /norestart
 
 ## Linux（Ubuntu 24.04／26.04）
 
-Linux 版有 IBus 與 Fcitx5 兩個前端，以 `.deb` 打包（`twpotato`、`ibus-twpotato`、`fcitx5-twpotato`；目前的 Release 未附，可用 `ime/linux/package.sh` 自行建置）。安裝、移除、
+Linux 版有 IBus 與 Fcitx5 兩個前端，以 `.deb` 打包（`twpotato`、`ibus-twpotato`、`fcitx5-twpotato`，附在 Release；也可用 `ime/linux/package.sh` 自行建置）。安裝、移除、
 設定檔格式與已知限制見 [`ime/linux/README.md`](ime/linux/README.md)。Linux 第一版沒有設定程式：設定與使用者詞庫是
 `~/.config/twpotato/` 下的 `settings.toml` 與 `userlex.tsv`，用文字編輯器修改。
 
@@ -111,7 +162,7 @@ cd settings-app; npm ci; npm run build; cd src-tauri; cargo build --release --lo
 
 GitHub Actions（`.github/workflows/build.yml`）用同一組腳本建置、測試並產生 MSI；需要私有資料的測試在缺檔時會自動略過。訓練資料與訓練程式不公開。
 
-Linux（Fcitx5／IBus，`ime/linux/`）與 macOS（InputMethodKit，`ime/macos/`）的前端程式碼也在本儲存庫，共用同一個引擎；目前的 Release 只附 Windows 安裝包（Linux 可自行打包，見上方「Linux」）。
+Linux（Fcitx5／IBus，`ime/linux/`）與 macOS（InputMethodKit，`ime/macos/`）的前端程式碼也在本儲存庫，共用同一個引擎；Release 附 Windows 安裝包與 Linux `.deb`；macOS 版尚未發布。
 
 ## 程式碼簽章政策
 
